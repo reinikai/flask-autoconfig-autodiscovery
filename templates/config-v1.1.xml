@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<clientConfig version="1.1">
+    <emailProvider id="yourdomain">
+        <domain>yourdomain</domain>
+        <displayName>Some Friendly Name</displayName>
+        <displayShortName>Name</displayShortName>
+        <incomingServer type="imap">
+            <hostname>your.mail.server</hostname>
+            <port>143</port>
+            <socketType>STARTTLS</socketType>
+            <authentication>password-cleartext</authentication>
+            <username>{{ username }}</username>
+        </incomingServer>
+        <outgoingServer type="smtp">
+            <hostname>your.mail.server</hostname>
+            <port>587</port>
+            <socketType>STARTTLS</socketType>
+            <authentication>password-cleartext</authentication>
+            <username>{{ username }}</username>
+        </outgoingServer>
+    </emailProvider>
+    <!-- This allows to access the webmail service of the provider.
+     The URLs are loaded into a standard webbrowser for the user.
+     Specifying this is optional. -->
+    <webMail>
+        <!-- Webpage where the user has to log in manually by entering username
+             and password himself.
+             HTTPS required. -->
+        <loginPage url="https://webmail.yourdomain/" />
+
+        <!-- Same as loginAutomaticDOM, but the website makes checks that
+             the user comes from the login page. So, open the login page
+             in the browser, get the page's DOM, fill out name and password
+             fields for the user, and trigger the login button.
+             The login button might not be an HTML button, just a div, so
+             to trigger it, send a click event to it.
+             HTTPS is required for the URL. -->
+        <loginPageInfo url="https://webmail.yourdomain/">
+            <!-- What to fill into the usernameField.
+                 Format is the same as for <username> within <incomingServer>,
+                 including placeholders. See below for valid placeholders. -->
+            <username>{{ username }}</username>
+            <!-- Allows to find the textfield on the page, to fill it out.
+                 The id attribute give the DOM ID,
+                 The name attribute give the DOM name attribute.
+                 One or both of id and name attributes must exist.
+                 Try the ID first (e.g. using getElementById()), if existing.
+                 Otherwise, try finding the element by name.
+                 Don't treat the IDs given in this XML file as trusted,
+                 but before using them, verify the format
+                 (e.g. only characters and digits for IDs).
+                 If you use powerful functions like jQuery, and the XML returns
+                 you code in the username ID, and you feed it unchecked to jQuery,
+                 it may be executed. -->
+            <usernameField id="rcmloginuser" name="_user" />
+            <passwordField id="rcmloginpwd" name="_pass" />
+            <!-- The submit button to trigger the server submit
+                 after filling in the fields.
+                 id and name attributes: See <usernameField> -->
+            <loginButton id="rcmloginsubmit" />
+        </loginPageInfo>
+    </webMail>
+</clientConfig>
